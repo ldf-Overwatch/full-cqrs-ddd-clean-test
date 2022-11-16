@@ -51,7 +51,11 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
     }
 
     public addLocation(location: Location): void {
-        this.location = location;
+        if(Object.is(this.location, location)) {
+            throw new Error('my vehicle is already parked at this location')
+        } else {
+            this.location = location;
+        }
     }
 
     public removeLocation(locationId: string): void {
