@@ -11,7 +11,7 @@ import { LocationCreateCommands } from '../../src/app/commands/location.create.c
 import {fleetHasVehicleQueries} from "../../src/app/queries/fleet.hasVehicle.queries";
 
 Given('my fleet', async function() {
-    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({}))
+    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({userId: '1'}))
     const command = await fleetCreateCommand.execute();
     this.fleet = command.args;
 })
@@ -88,7 +88,7 @@ Then('I should be informed this this vehicle has already been registered into my
 });
 
 Given('the fleet of another user', async function () {
-    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({}))
+    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({userId: '2'}))
     const command = await fleetCreateCommand.execute();
     this.fleetOtherUser = command.args;
 });

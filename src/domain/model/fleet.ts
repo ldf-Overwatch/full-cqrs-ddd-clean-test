@@ -16,11 +16,13 @@ export interface UnmarshalledFeed {
 
 export interface FeedProps {
     id?: string
+    userId: string
     rawVehicles?: UnmarshalledFeedVehicle[]
 }
 
 export class Fleet extends Entity<FeedProps> {
     private _vehicles: FeedVehicle[]
+    private userId: string;
 
     private constructor({ id, ...data }: FeedProps) {
         super(data, id)
@@ -28,6 +30,7 @@ export class Fleet extends Entity<FeedProps> {
 
     public static create(props: FeedProps): Fleet {
         const instance = new Fleet(props)
+        instance.userId = instance.props.userId
         instance.vehicles = instance.props.rawVehicles || []
         return instance
     }
