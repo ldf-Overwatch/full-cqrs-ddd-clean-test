@@ -55,32 +55,15 @@ export class Fleet extends Entity<FeedProps> {
         }))
     }
 
+    public hasVehicleInFleet(vehicle: Vehicle) {
+        return (this.vehicles.findIndex((item) => item.vehicle.id === vehicle.id) > -1);
+    }
+
     public addVehicle(vehicle: Vehicle): void {
-
-        const index = this.vehicles.findIndex((item) => item.vehicle.type === vehicle.type)
-
-        if (index > -1) {
-            const vehicle = {
-                ...this.vehicles[index]
-            }
-
-            this.vehicles = [
-                ...this.vehicles.slice(0, index),
-                vehicle,
-                ...this.vehicles.slice(index + 1),
-            ]
+        if (this.hasVehicleInFleet(vehicle)) {
+            throw new Error('this vehicle has already been registered into this fleet')
         } else {
             this.vehicles = [...this.vehicles, { vehicle }]
         }
-    }
-
-    public removeVehicle(vehicleId: string): void {
-        this.vehicles = this.vehicles.filter(
-            (item) => item.vehicle.id !== vehicleId,
-        )
-    }
-
-    public emptyVehicules(): void {
-        this.vehicles = []
     }
 }

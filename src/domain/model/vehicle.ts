@@ -57,11 +57,4 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
             this.location = location;
         }
     }
-
-    public removeLocation(locationId: string): void {
-        if (locationId !== this.location.id) {
-            return;
-        }
-        this.location = null
-    }
 }
