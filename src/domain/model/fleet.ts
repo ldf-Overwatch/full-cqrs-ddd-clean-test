@@ -35,9 +35,10 @@ export class Fleet extends Entity<FeedProps> {
         return instance
     }
 
-    public unmarshal(): UnmarshalledFeed {
+    public unmarshal(): { vehicles: { vehicle: UnmarshalledVehicle }[]; id: string; userId: string } {
         return {
             id: this.id,
+            userId: this.userId,
             vehicles: this.vehicles.map((item) => ({
                 vehicle: item.vehicle.unmarshal()
             }))
