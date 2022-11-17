@@ -4,7 +4,7 @@ import {UnmarshalledLocation, Location} from './location';
 export interface UnmarshalledVehicle {
     id?: string
     type: string
-    displayName: string
+    vehiclePlateNumber: string
     location?: UnmarshalledLocation
 }
 
@@ -25,7 +25,7 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
         return {
             id: this.id,
             type: this.type,
-            displayName: this.displayName,
+            vehiclePlateNumber: this.vehiclePlateNumber,
             location: this.location
         }
     }
@@ -38,8 +38,8 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
         return this.props.type
     }
 
-    get displayName(): string {
-        return this.props.displayName
+    get vehiclePlateNumber(): string {
+        return this.props.vehiclePlateNumber
     }
 
     set location(location: Location | UnmarshalledLocation)  {

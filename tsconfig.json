@@ -4,7 +4,6 @@
     "moduleResolution": "node",
     "target": "es2020",
     "lib": ["es2020"],
-    "types": ["module"],
     "outDir": "./dist",
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -14,6 +13,7 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
   },
+  "include": ["src/", "./**/*.ts"],
   "exclude": [
     "node_modules",
     "dist"

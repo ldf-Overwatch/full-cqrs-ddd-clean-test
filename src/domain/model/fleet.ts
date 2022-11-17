@@ -16,13 +16,12 @@ export interface UnmarshalledFeed {
 
 export interface FeedProps {
     id?: string
-    userId: string
+    userId: number
     rawVehicles?: UnmarshalledFeedVehicle[]
 }
 
 export class Fleet extends Entity<FeedProps> {
     private _vehicles: FeedVehicle[]
-    private userId: string;
 
     private constructor({ id, ...data }: FeedProps) {
         super(data, id)
@@ -30,12 +29,11 @@ export class Fleet extends Entity<FeedProps> {
 
     public static create(props: FeedProps): Fleet {
         const instance = new Fleet(props)
-        instance.userId = instance.props.userId
         instance.vehicles = instance.props.rawVehicles || []
         return instance
     }
 
-    public unmarshal(): { vehicles: { vehicle: UnmarshalledVehicle }[]; id: string; userId: string } {
+    public unmarshal(): { vehicles: { vehicle: UnmarshalledVehicle }[]; id: string; userId: number } {
         return {
             id: this.id,
             userId: this.userId,
@@ -47,6 +45,10 @@ export class Fleet extends Entity<FeedProps> {
 
     get id(): string {
         return this._id
+    }
+
+    get userId(): number {
+        return this.props.userId
     }
 
     get vehicles(): FeedVehicle[] {
