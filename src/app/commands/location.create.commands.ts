@@ -1,5 +1,6 @@
 import { TCommand } from '../core/TCommand'
 import { Location }  from '../../domain/model/location'
+import {LocationRepository} from "../../infra/database/repository/location";
 
 export class LocationCreateCommands extends TCommand {
 
@@ -10,9 +11,16 @@ export class LocationCreateCommands extends TCommand {
         this.location = location
     }
 
-    public async execute(): Promise<{ args: Location; commandName: string; id: string }> {
+    public async execute(){
+
+        await LocationRepository.findOneAndUpdate(
+            {id: this.location.id },
+            {$set: this.location.unmarshal()},
+            {upsert: true, new: true}
+        );
+
         return {
-            id: this.id,
+            id: this.location.id,
             commandName: 'LocationCreate',
             args: this.location,
         }

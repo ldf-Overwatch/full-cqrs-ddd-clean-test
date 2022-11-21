@@ -10,23 +10,28 @@ export interface UnmarshalledVehicle {
 
 export class Vehicle extends Entity<UnmarshalledVehicle> {
 
-    private _location: Location | UnmarshalledLocation
+    private _location: Location
 
     private constructor(props: UnmarshalledVehicle) {
         const { id, ...data } = props
-        super(data, id)
+        super(data)
     }
 
     public static create(props: UnmarshalledVehicle): Vehicle {
         return new Vehicle(props)
     }
 
-    public unmarshal(): UnmarshalledVehicle {
+    public unmarshal() {
         return {
             id: this.id,
             type: this.type,
             vehiclePlateNumber: this.vehiclePlateNumber,
-            location: this.location
+            location: this.location ? {
+                id: this.location.id,
+                latitude: this.location.latitude,
+                longitude: this.location.longitude,
+                elevation: this.location.elevation
+            } : undefined
         }
     }
 
@@ -42,16 +47,16 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
         return this.props.vehiclePlateNumber
     }
 
-    set location(location: Location | UnmarshalledLocation)  {
+    set location(location: Location)  {
         this._location = location instanceof Location ? location : Location.create(location)
     }
 
-    get location():Location | UnmarshalledLocation {
+    get location():Location {
         return this._location
     }
 
     public addLocation(location: Location): void {
-        if(Object.is(this.location, location)) {
+        if(this.location && Object.is(this.location, location)) {
             throw new Error('my vehicle is already parked at this location')
         } else {
             this.location = location;

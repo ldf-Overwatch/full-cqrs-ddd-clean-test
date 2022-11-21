@@ -31,7 +31,8 @@ Given('a location', async function() {
 Given('I have registered this vehicle into my fleet', async function() {
     const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle)
     const command = await fleetAddVehicleCommand.execute()
-    this.fleet = command.args
+    this.fleet = command.args;
+    expect(command.args.vehicles[0]).to.equal(this.vehicle)
 })
 
 When('I park my vehicle at this location', async function(){

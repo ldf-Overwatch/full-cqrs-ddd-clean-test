@@ -1,27 +1,20 @@
 import {Entity} from './common/entity'
 import {UnmarshalledVehicle, Vehicle} from './vehicle'
 
-export interface FeedVehicle {
-    vehicle: Vehicle
-}
-
-export interface UnmarshalledFeedVehicle {
-    vehicle: UnmarshalledVehicle
-}
-
-export interface UnmarshalledFeed {
+export interface UnmarshalledFleet {
     id: string
-    vehicles: UnmarshalledFeedVehicle[]
+    userId: number
+    vehicles?: UnmarshalledVehicle[]
 }
 
 export interface FeedProps {
     id?: string
     userId: number
-    rawVehicles?: UnmarshalledFeedVehicle[]
+    rawVehicles?: Vehicle[]
 }
 
 export class Fleet extends Entity<FeedProps> {
-    private _vehicles: FeedVehicle[]
+    private _vehicles: Vehicle[]
 
     private constructor({ id, ...data }: FeedProps) {
         super(data, id)
@@ -33,13 +26,23 @@ export class Fleet extends Entity<FeedProps> {
         return instance
     }
 
-    public unmarshal(): { vehicles: { vehicle: UnmarshalledVehicle }[]; id: string; userId: number } {
+    public unmarshal(): { vehicles: UnmarshalledVehicle[]; id: string; userId: number } {
         return {
             id: this.id,
             userId: this.userId,
-            vehicles: this.vehicles.map((item) => ({
-                vehicle: item.vehicle.unmarshal()
-            }))
+            vehicles: this.vehicles.map((item) => {
+                return {
+                    id: item.id,
+                    type: item.type,
+                    vehiclePlateNumber: item.vehiclePlateNumber,
+                    location: item.location ? {
+                        id: item.location.id,
+                        latitude: item.location.latitude,
+                        longitude: item.location.longitude,
+                        elevation: item.location.elevation
+                    } : undefined
+                }
+            })
         }
     }
 
@@ -51,25 +54,35 @@ export class Fleet extends Entity<FeedProps> {
         return this.props.userId
     }
 
-    get vehicles(): FeedVehicle[] {
+    get vehicles(): Vehicle[] {
         return this._vehicles
     }
 
-    set vehicles(vehicles: FeedVehicle[] | UnmarshalledFeedVehicle[]) {
-        this._vehicles = vehicles.map((item) => ({
-            vehicle: item.vehicle instanceof Vehicle ? item.vehicle : Vehicle.create(item.vehicle)
-        }))
+    set vehicles(vehicles: UnmarshalledVehicle[]) {
+        this._vehicles = vehicles.map((item) => {
+            return item instanceof Vehicle ? item : Vehicle.create(item)
+        })
     }
 
     public hasVehicleInFleet(vehicle: Vehicle) {
-        return (this.vehicles.findIndex((item) => item.vehicle.id === vehicle.id) > -1);
+        if(this.vehicles && this.vehicles.length > 0) {
+            return (this.vehicles.findIndex((item) => item.id === vehicle.id) > -1);
+        } else {
+            return false;
+        }
+
     }
 
     public addVehicle(vehicle: Vehicle): void {
-        if (this.hasVehicleInFleet(vehicle)) {
-            throw new Error('this vehicle has already been registered into this fleet')
+        if(this.vehicles && this.vehicles.length > 0) {
+            if (this.hasVehicleInFleet(vehicle)) {
+                throw new Error('this vehicle has already been registered into this fleet')
+            } else {
+                this.vehicles = [...this.vehicles, vehicle]
+            }
         } else {
-            this.vehicles = [...this.vehicles, { vehicle }]
+            this.vehicles = [];
+            this.vehicles = [...this.vehicles, vehicle]
         }
     }
 }

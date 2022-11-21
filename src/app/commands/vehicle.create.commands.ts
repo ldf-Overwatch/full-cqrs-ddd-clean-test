@@ -1,5 +1,6 @@
 import { TCommand } from '../core/TCommand'
 import { Vehicle }  from '../../domain/model/vehicle'
+import {VehicleRepository} from "../../infra/database/repository/vehicle";
 
 export class VehicleCreateCommands extends TCommand {
 
@@ -10,7 +11,14 @@ export class VehicleCreateCommands extends TCommand {
         this.vehicle = vehicle
     }
 
-    public async execute(): Promise<{ args: Vehicle; commandName: string; id: string }> {
+    public async execute() {
+
+        await VehicleRepository.findOneAndUpdate(
+            {id: this.vehicle.id },
+            {$set: this.vehicle.unmarshal()},
+            {upsert: true, new: true}
+        );
+
         return {
             id: this.id,
             commandName: 'VehicleCreate',
