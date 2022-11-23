@@ -17,7 +17,7 @@
     "typescript": "^4.5.4"
   },
   "scripts": {
-    "test": "cucumber-js --profile default",
+    "test": "cucumber-js --profile default --exit",
     "build": "tsc -b",
     "lint": "eslint src/**/*.ts bin/**/**.ts",
     "format": "eslint src/**/*.ts bin/**/**.ts --fix"
