@@ -21,7 +21,8 @@
     "build": "tsc -b",
     "lint": "eslint src/**/*.ts bin/**/**.ts",
     "format": "eslint src/**/*.ts bin/**/**.ts --fix",
-    "prettier": "prettier --write ."
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "bin": {
     "fleet": "./bin/fleet.ts"
