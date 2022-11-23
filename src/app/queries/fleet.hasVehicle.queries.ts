@@ -2,9 +2,9 @@ import { IQuery } from '../core/interfaces/IQuery'
 
 export class fleetHasVehicleQueries implements IQuery {
 
-    private boolean:Boolean
+    private boolean:boolean
 
-    constructor(boolean: Boolean) {
+    constructor(boolean: boolean) {
         this.boolean = boolean
     }
 

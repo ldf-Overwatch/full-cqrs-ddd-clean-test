@@ -1,5 +1,6 @@
 import { connect } from 'mongoose';
+require('dotenv').config();
 
 export async function run() {
-    await connect('mongodb://localhost:27017/test');
+    await connect(process.env.MONGO_URI);
 }
