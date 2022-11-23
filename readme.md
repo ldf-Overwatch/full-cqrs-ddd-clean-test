@@ -1,5 +1,9 @@
 Test
 
+Algo test is in directory : fizzbuzz/
+
+BackEnd test :
+
 required : MongoDB
 you can use my docker-compose to install a version on mongodb, you myst have docker install on your desktop
 
