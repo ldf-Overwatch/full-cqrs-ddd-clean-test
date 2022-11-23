@@ -1,13 +1,13 @@
 import { IQuery } from '../core/interfaces/IQuery'
-import {IVehicleMethods, VehicleRepository} from "../../infra/database/repository/vehicle";
+import {VehicleRepository} from "../../infra/database/repository/vehicle";
 import {Query, Document, Types} from "mongoose";
 import {UnmarshalledVehicle} from "../../domain/model/vehicle";
 
 export class vehicleGetByIdQueries implements IQuery {
 
-    private vehicle: Query<Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, {}, UnmarshalledVehicle>
+    private vehicle: Query<Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, UnmarshalledVehicle>
 
-    constructor(vehicle: Query<Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, {}, UnmarshalledVehicle>) {
+    constructor(vehicle: Query<Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, UnmarshalledVehicle>) {
         this.vehicle = vehicle
     }
 

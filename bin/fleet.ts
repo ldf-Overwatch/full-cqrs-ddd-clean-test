@@ -12,6 +12,7 @@ import {vehicleGetInFleetQueries} from "../src/app/queries/vehicule.getInFleet.q
 
 const yargs = require('yargs');
 
+// eslint-disable-next-line
 const argv = yargs
     .command('create <userId>', 'create a fleet of an user',
         (yargs: any) => {

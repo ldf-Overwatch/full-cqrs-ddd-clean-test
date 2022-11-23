@@ -31,10 +31,5 @@
     "husky": "^8.0.2",
     "mongoose": "^6.7.2",
     "yargs": "^17.6.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint"
-    }
   }
 }

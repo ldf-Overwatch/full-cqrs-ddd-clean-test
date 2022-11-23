@@ -1,6 +1,6 @@
 import { TCommand } from '../core/TCommand'
 import {UnmarshalledVehicle} from '../../domain/model/vehicle'
-import {IVehicleMethods, VehicleRepository} from "../../infra/database/repository/vehicle";
+import {VehicleRepository} from "../../infra/database/repository/vehicle";
 import {vehicleGetByIdQueries} from "../queries/vehicle.getById.queries";
 import {locationGetByIdQueries} from "../queries/location.getById.queries";
 import {Query, Document, Types} from "mongoose";
@@ -8,11 +8,11 @@ import {UnmarshalledLocation} from "../../domain/model/location";
 
 export class VehicleAddLocationCommands extends TCommand {
 
-    private vehicle: Query<Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, {}, UnmarshalledVehicle>
-    private location: Query<Document<unknown, any, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, Document<unknown, any, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, {}, UnmarshalledLocation>
+    private vehicle: Query<Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, UnmarshalledVehicle>
+    private location: Query<Document<unknown, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, Document<unknown, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, UnmarshalledLocation>
 
-    constructor(vehicle: Query<Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId } & IVehicleMethods, {}, UnmarshalledVehicle>,
-                location: Query<Document<unknown, any, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, Document<unknown, any, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, {}, UnmarshalledLocation>) {
+    constructor(vehicle: Query<Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId }, UnmarshalledVehicle>,
+                location: Query<Document<unknown, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, Document<unknown, UnmarshalledLocation> & UnmarshalledLocation & { _id: Types.ObjectId }, UnmarshalledLocation>) {
         super()
         this.vehicle = vehicle
         this.location = location

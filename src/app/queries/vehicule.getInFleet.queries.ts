@@ -1,7 +1,5 @@
 import { IQuery } from '../core/interfaces/IQuery'
-import {IVehicleMethods, VehicleRepository} from "../../infra/database/repository/vehicle";
-import {Query, Document, Types} from "mongoose";
-import {UnmarshalledVehicle} from "../../domain/model/vehicle";
+import {VehicleRepository} from "../../infra/database/repository/vehicle";
 import {FleetRepository} from "../../infra/database/repository/fleet";
 
 export class vehicleGetInFleetQueries implements IQuery {

@@ -13,7 +13,7 @@ export class Vehicle extends Entity<UnmarshalledVehicle> {
     private _location: Location
 
     private constructor(props: UnmarshalledVehicle) {
-        const { id, ...data } = props
+        const {...data } = props
         super(data)
     }
 

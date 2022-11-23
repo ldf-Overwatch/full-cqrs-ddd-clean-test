@@ -2,16 +2,15 @@ import { TCommand } from '../core/TCommand'
 import {UnmarshalledFleet} from '../../domain/model/fleet'
 import {UnmarshalledVehicle} from '../../domain/model/vehicle';
 import {FleetRepository, IFleetMethods} from '../../infra/database/repository/fleet';
-import {IVehicleMethods} from "../../infra/database/repository/vehicle";
 import { Document, Types} from "mongoose"
 
 export class FleetAddVehicleCommands extends TCommand {
 
-    private fleet: Document<unknown, any, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods
-    private vehicle: Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; } & IVehicleMethods
+    private fleet: Document<unknown, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods
+    private vehicle: Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; }
 
-    constructor(fleet: Document<unknown, any, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods,
-                vehicle: Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; } & IVehicleMethods) {
+    constructor(fleet: Document<unknown, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods,
+                vehicle: Document<unknown, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; }) {
         super()
         this.fleet = fleet
         this.vehicle = vehicle

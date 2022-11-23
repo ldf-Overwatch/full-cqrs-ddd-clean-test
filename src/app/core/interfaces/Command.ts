@@ -1,5 +1,3 @@
-import { Message } from './Message';
-
-export interface Command extends Message {
+export interface Command {
     id: string;
 }
