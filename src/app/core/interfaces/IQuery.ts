@@ -1,5 +1,5 @@
-import {run} from '../../../infra/database/mongo';
+import { run } from '../../../infra/database/mongo';
 
-run().catch(err => console.log(err));
+run().catch((err) => console.log(err));
 
-export interface IQuery {}// eslint-disable-line no-eval
+export interface IQuery {} // eslint-disable-line no-eval

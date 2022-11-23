@@ -1,14 +1,13 @@
-import { IQuery } from '../core/interfaces/IQuery'
+import { IQuery } from '../core/interfaces/IQuery';
 
 export class fleetHasVehicleQueries implements IQuery {
+  private boolean: boolean;
 
-    private boolean:boolean
+  constructor(boolean: boolean) {
+    this.boolean = boolean;
+  }
 
-    constructor(boolean: boolean) {
-        this.boolean = boolean
-    }
-
-    public async execute() {
-        return this.boolean;
-    }
+  public async execute() {
+    return this.boolean;
+  }
 }

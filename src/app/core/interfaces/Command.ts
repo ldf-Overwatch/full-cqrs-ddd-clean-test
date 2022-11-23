@@ -1,3 +1,3 @@
 export interface Command {
-    id: string;
+  id: string;
 }

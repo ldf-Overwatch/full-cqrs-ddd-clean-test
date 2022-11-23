@@ -8,6 +8,3 @@ to launch a mongodb instance : `docker-compose up`
 to make test : `yarn test`
 
 to use cli `bin/fleet.ts help`
-
-
-

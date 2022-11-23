@@ -1,122 +1,126 @@
-import { Given, When, Then } from '@cucumber/cucumber'
-import { expect } from 'chai'
-import { Vehicle } from '../../src/domain/model/vehicle'
-import { Fleet } from '../../src/domain/model/fleet'
-import { Location } from '../../src/domain/model/location'
-import { FleetCreateCommands } from '../../src/app/commands/fleet.create.commands'
-import { FleetAddVehicleCommands } from '../../src/app/commands/fleet.addVehicle.commands'
-import { VehicleAddLocationCommands } from '../../src/app/commands/vehicle.addLocation.command'
-import { VehicleCreateCommands } from '../../src/app/commands/vehicle.create.commands'
-import { LocationCreateCommands } from '../../src/app/commands/location.create.commands'
-import {fleetHasVehicleQueries} from "../../src/app/queries/fleet.hasVehicle.queries";
-import {locationGetByIdQueries} from "../../src/app/queries/location.getById.queries";
+import { Given, When, Then } from '@cucumber/cucumber';
+import { expect } from 'chai';
+import { Vehicle } from '../../src/domain/model/vehicle';
+import { Fleet } from '../../src/domain/model/fleet';
+import { Location } from '../../src/domain/model/location';
+import { FleetCreateCommands } from '../../src/app/commands/fleet.create.commands';
+import { FleetAddVehicleCommands } from '../../src/app/commands/fleet.addVehicle.commands';
+import { VehicleAddLocationCommands } from '../../src/app/commands/vehicle.addLocation.command';
+import { VehicleCreateCommands } from '../../src/app/commands/vehicle.create.commands';
+import { LocationCreateCommands } from '../../src/app/commands/location.create.commands';
+import { fleetHasVehicleQueries } from '../../src/app/queries/fleet.hasVehicle.queries';
+import { locationGetByIdQueries } from '../../src/app/queries/location.getById.queries';
 
-Given('my fleet', async function() {
-    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({userId: 1}))
-    const command = await fleetCreateCommand.execute();
+Given('my fleet', async function () {
+  const fleetCreateCommand = new FleetCreateCommands(Fleet.create({ userId: 1 }));
+  const command = await fleetCreateCommand.execute();
+  this.fleet = command.args;
+});
+
+Given('a vehicle', async function () {
+  const vehicleCreateCommand = new VehicleCreateCommands(
+    Vehicle.create({ type: 'car', vehiclePlateNumber: 'FR-251-SR' }),
+  );
+  const command = await vehicleCreateCommand.execute();
+  this.vehicle = command.args;
+});
+
+Given('a location', async function () {
+  const locationCreateCommand = new LocationCreateCommands(
+    Location.create({ latitude: 12, longitude: 13, elevation: 100 }),
+  );
+  const command = await locationCreateCommand.execute();
+  this.location = command.args;
+});
+
+Given('I have registered this vehicle into my fleet', async function () {
+  try {
+    const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle);
+    const command = await fleetAddVehicleCommand.execute();
     this.fleet = command.args;
-})
+  } catch (e) {
+    expect(e.message).to.equal('this vehicle has already been registered into this fleet');
+  }
+});
 
-Given('a vehicle', async function() {
-    const vehicleCreateCommand = new VehicleCreateCommands(Vehicle.create({type: 'car', vehiclePlateNumber: 'FR-251-SR'}))
-    const command = await vehicleCreateCommand.execute();
+When('I park my vehicle at this location', async function () {
+  try {
+    const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location);
+    const command = await vehicleAddLocationCommand.execute();
     this.vehicle = command.args;
-})
-
-Given('a location', async function() {
-    const locationCreateCommand = new LocationCreateCommands(Location.create({latitude: 12, longitude: 13, elevation: 100}))
-    const command = await locationCreateCommand.execute();
-    this.location = command.args;
-})
-
-Given('I have registered this vehicle into my fleet', async function() {
-    try {
-        const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle)
-        const command = await fleetAddVehicleCommand.execute()
-        this.fleet = command.args
-    } catch(e) {
-        expect(e.message).to.equal('this vehicle has already been registered into this fleet')
-    }
-})
-
-When('I park my vehicle at this location', async function(){
-    try {
-        const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location)
-        const command = await vehicleAddLocationCommand.execute()
-        this.vehicle = command.args
-    } catch(e) {
-        expect(e.message).to.equal('my vehicle is already parked at this location')
-    }
-})
+  } catch (e) {
+    expect(e.message).to.equal('my vehicle is already parked at this location');
+  }
+});
 
 Then('the known location of my vehicle should verify this location', async function () {
-    const locationGetByIdQuery = new locationGetByIdQueries(this.location);
-    const locationQuery = await locationGetByIdQuery.execute();
-    expect(locationQuery.args.id).to.equal(this.location.id)
+  const locationGetByIdQuery = new locationGetByIdQueries(this.location);
+  const locationQuery = await locationGetByIdQuery.execute();
+  expect(locationQuery.args.id).to.equal(this.location.id);
 });
 
 Given('my vehicle has been parked into this location', async function () {
-    try {
-        const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location)
-        const command = await vehicleAddLocationCommand.execute()
-        this.vehicle = command.args
-    } catch(e) {
-        expect(e.message).to.equal('my vehicle is already parked at this location')
-    }
+  try {
+    const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location);
+    const command = await vehicleAddLocationCommand.execute();
+    this.vehicle = command.args;
+  } catch (e) {
+    expect(e.message).to.equal('my vehicle is already parked at this location');
+  }
 });
 
 When('I try to park my vehicle at this location', async function () {
-    try {
-        const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location)
-        const command = await vehicleAddLocationCommand.execute()
-        this.vehicle = command.args
-    } catch(e) {
-        this.error = e;
-    }
+  try {
+    const vehicleAddLocationCommand = new VehicleAddLocationCommands(this.vehicle, this.location);
+    const command = await vehicleAddLocationCommand.execute();
+    this.vehicle = command.args;
+  } catch (e) {
+    this.error = e;
+  }
 });
 
 Then('I should be informed that my vehicle is already parked at this location', function () {
-    expect(this.error.message).to.equal('my vehicle is already parked at this location')
+  expect(this.error.message).to.equal('my vehicle is already parked at this location');
 });
 
 When('I register this vehicle into my fleet', async function () {
-    const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle)
-    const command = await fleetAddVehicleCommand.execute()
-    this.fleet = command.args
+  const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle);
+  const command = await fleetAddVehicleCommand.execute();
+  this.fleet = command.args;
 });
 
 Then('this vehicle should be part of my vehicle fleet', async function () {
-   this.hasVehicleInFleet = new fleetHasVehicleQueries(this.fleet.hasVehicleInFleet(this.vehicle));
-   expect(await this.hasVehicleInFleet.execute()).to.be.true
+  this.hasVehicleInFleet = new fleetHasVehicleQueries(this.fleet.hasVehicleInFleet(this.vehicle));
+  expect(await this.hasVehicleInFleet.execute()).to.be.true;
 });
 
 When('I try to register this vehicle into my fleet', async function () {
-    try {
-        const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle)
-        const command = await fleetAddVehicleCommand.execute()
-        this.fleet = command.args
-    } catch (e) {
-        this.error = e;
-    }
+  try {
+    const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleet, this.vehicle);
+    const command = await fleetAddVehicleCommand.execute();
+    this.fleet = command.args;
+  } catch (e) {
+    this.error = e;
+  }
 });
 
 Then('I should be informed this this vehicle has already been registered into my fleet', function () {
-    expect(this.error).to.be.an('error')
-    expect(this.error.message).to.equal('this vehicle has already been registered into this fleet')
+  expect(this.error).to.be.an('error');
+  expect(this.error.message).to.equal('this vehicle has already been registered into this fleet');
 });
 
 Given('the fleet of another user', async function () {
-    const fleetCreateCommand = new FleetCreateCommands(Fleet.create({userId: 2}))
-    const command = await fleetCreateCommand.execute();
-    this.fleetOtherUser = command.args;
+  const fleetCreateCommand = new FleetCreateCommands(Fleet.create({ userId: 2 }));
+  const command = await fleetCreateCommand.execute();
+  this.fleetOtherUser = command.args;
 });
 
-Given('this vehicle has been registered into the other user\'s fleet', async function () {
-    try {
-        const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleetOtherUser, this.vehicle)
-        const command = await fleetAddVehicleCommand.execute()
-        this.fleetOtherUser = command.args
-    } catch(e) {
-        expect(this.error.message).to.equal('this vehicle has already been registered into this fleet')
-    }
+Given("this vehicle has been registered into the other user's fleet", async function () {
+  try {
+    const fleetAddVehicleCommand = new FleetAddVehicleCommands(this.fleetOtherUser, this.vehicle);
+    const command = await fleetAddVehicleCommand.execute();
+    this.fleetOtherUser = command.args;
+  } catch (e) {
+    expect(this.error.message).to.equal('this vehicle has already been registered into this fleet');
+  }
 });
