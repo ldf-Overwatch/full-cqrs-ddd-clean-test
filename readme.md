@@ -10,6 +10,7 @@ to make test : `yarn test`
 to use cli `bin/fleet.ts help`
 
 To make ci i used husky :
+
 - esltin for quality code
 - prettier for reformat presentation
 - cucumber for unit test
