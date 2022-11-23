@@ -1,6 +1,6 @@
-import { Query } from '../core/interfaces/Query'
+import { IQuery } from '../core/interfaces/IQuery'
 
-export class fleetHasVehicleQueries implements Query {
+export class fleetHasVehicleQueries implements IQuery {
 
     private boolean:Boolean
 

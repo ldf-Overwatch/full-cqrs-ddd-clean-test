@@ -1,30 +1,36 @@
 import { TCommand } from '../core/TCommand'
-import { Fleet }  from '../../domain/model/fleet'
-import { Vehicle } from '../../domain/model/vehicle';
-import { FleetRepository } from '../../infra/database/repository/fleet';
+import {UnmarshalledFleet} from '../../domain/model/fleet'
+import {UnmarshalledVehicle} from '../../domain/model/vehicle';
+import {FleetRepository, IFleetMethods} from '../../infra/database/repository/fleet';
+import {IVehicleMethods} from "../../infra/database/repository/vehicle";
+import { Document, Types} from "mongoose"
 
 export class FleetAddVehicleCommands extends TCommand {
 
-    private fleet:Fleet
+    private fleet: Document<unknown, any, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods
+    private vehicle: Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; } & IVehicleMethods
 
-    constructor(fleet: Fleet, vehicle: Vehicle) {
+    constructor(fleet: Document<unknown, any, UnmarshalledFleet> & UnmarshalledFleet & { _id: Types.ObjectId; } & IFleetMethods,
+                vehicle: Document<unknown, any, UnmarshalledVehicle> & UnmarshalledVehicle & { _id: Types.ObjectId; } & IVehicleMethods) {
         super()
-        fleet.addVehicle(vehicle)
         this.fleet = fleet
+        this.vehicle = vehicle
     }
 
     public async execute() {
+        if(! await (await this.fleet).hasVehicleInFleet(this.vehicle)) {
 
-        await FleetRepository.findOneAndUpdate(
-            {id: this.fleet.id },
-            {$set: this.fleet.unmarshal()},
-            {upsert: true, new: true}
-        );
+            const saveFleet = await FleetRepository.findOneAndUpdate(
+                { id: (await this.fleet).id }, { $push: {vehicles : this.vehicle } }, {new : true}
+            );
 
-        return {
-            id: this.id,
-            commandName: 'FleetAddVehicle',
-            args: this.fleet,
+            return {
+                id: saveFleet.id,
+                commandName: 'FleetAddVehicle',
+                args: saveFleet,
+            }
+        } else {
+            throw new Error('this vehicle has already been registered into this fleet')
         }
     }
 }

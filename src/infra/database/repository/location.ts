@@ -6,6 +6,6 @@ export const locationSchema = new Schema<UnmarshalledLocation>({
     latitude: { type: Number, required: true },
     longitude: { type: Number, required: true },
     elevation: { type: Number, required: true },
-}, { _id: false });
+});
 
 export const LocationRepository = model<UnmarshalledLocation>('Location', locationSchema);

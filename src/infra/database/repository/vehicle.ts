@@ -1,17 +1,17 @@
-import { Schema, model } from 'mongoose';
-import { UnmarshalledVehicle } from '../../../domain/model/vehicle';
+import {Schema, model, Types, Model} from 'mongoose';
+import {UnmarshalledVehicle, Vehicle} from '../../../domain/model/vehicle';
+import {Location} from "../../../domain/model/location";
 
-export const vehicleSchema = new Schema<UnmarshalledVehicle>({
+export interface IVehicleMethods {
+}
+
+type VehicleModel = Model<UnmarshalledVehicle, {}, IVehicleMethods>;
+
+export const vehicleSchema = new Schema<UnmarshalledVehicle, VehicleModel, IVehicleMethods>({
     id: { type: String, required: true, index: true },
     type: { type: String, required: true },
     vehiclePlateNumber: { type: String, required: true },
-    location : {
-        _id: false,
-        id: { type: String, required: true, index: true },
-        latitude: { type: Number, required: true },
-        longitude: { type: Number, required: true },
-        elevation: { type: Number, required: true },
-    },
-}, { _id: false });
+    location : {type:  Types.ObjectId, ref: 'Location', required: false},
+}, { _id: false});
 
-export const VehicleRepository = model<UnmarshalledVehicle>('Vehicle', vehicleSchema);
+export const VehicleRepository = model<UnmarshalledVehicle, VehicleModel>('Vehicle', vehicleSchema);

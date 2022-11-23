@@ -13,16 +13,16 @@ export class FleetCreateCommands extends TCommand {
 
     public async execute() {
 
-        await FleetRepository.findOneAndUpdate(
+        const fleet = await FleetRepository.findOneAndUpdate(
             {id: this.fleet.id },
             {$set: this.fleet.unmarshal()},
             {upsert: true, new: true}
         );
 
         return {
-            id: this.id,
+            id: fleet.id,
             commandName: 'FleetCreate',
-            args: this.fleet,
+            args: fleet,
         }
     }
 }

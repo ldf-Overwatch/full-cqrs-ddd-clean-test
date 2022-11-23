@@ -13,16 +13,16 @@ export class VehicleCreateCommands extends TCommand {
 
     public async execute() {
 
-        await VehicleRepository.findOneAndUpdate(
-            {id: this.vehicle.id },
+        const vehicle = await VehicleRepository.findOneAndUpdate(
+            {vehiclePlateNumber: this.vehicle.vehiclePlateNumber },
             {$set: this.vehicle.unmarshal()},
             {upsert: true, new: true}
         );
 
         return {
-            id: this.id,
+            id: vehicle.id,
             commandName: 'VehicleCreate',
-            args: this.vehicle,
+            args: vehicle,
         }
     }
 }

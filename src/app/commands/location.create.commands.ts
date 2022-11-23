@@ -13,16 +13,16 @@ export class LocationCreateCommands extends TCommand {
 
     public async execute(){
 
-        await LocationRepository.findOneAndUpdate(
-            {id: this.location.id },
+        const location = await LocationRepository.findOneAndUpdate(
+            {latitude: this.location.latitude, longitude: this.location.longitude, elevation: this.location.elevation },
             {$set: this.location.unmarshal()},
             {upsert: true, new: true}
         );
 
         return {
-            id: this.location.id,
+            id: location.id,
             commandName: 'LocationCreate',
-            args: this.location,
+            args: location,
         }
     }
 }
