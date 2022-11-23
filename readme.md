@@ -9,10 +9,10 @@ to make test : `yarn test`
 
 to use cli `bin/fleet.ts help`
 
-To make ci i used husky :
+To make ci i used husky : `yarn prepare`
 
-- esltin for quality code
-- prettier for reformat presentation
-- cucumber for unit test
+- esltin for quality code : `yarn format`
+- prettier for reformat presentation : `yarn prettier`
+- cucumber for unit test: `yarn test`
 
 for cd, we can use circleci to deploy code on the future server environnement.
