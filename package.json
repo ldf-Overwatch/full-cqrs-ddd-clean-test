@@ -19,8 +19,8 @@
   "scripts": {
     "test": "cucumber-js --profile default --exit",
     "build": "tsc -b",
-    "lint": "eslint src/**/*.ts bin/**/**.ts",
-    "format": "eslint src/**/*.ts bin/**/**.ts --fix",
+    "lint": "eslint src/**/*.ts bin/**/**.ts fizzbuzz/**/*.js",
+    "format": "eslint src/**/*.ts bin/**/**.ts fizzbuzz/**/*.js --fix",
     "prettier": "prettier --write .",
     "prepare": "husky install"
   },
